@@ -1,0 +1,51 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/client"
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  name         String
+  email        String        @unique
+  passwordHash String
+  role         String        // "GUIDE" or "TOURIST"
+  createdAt    DateTime      @default(now())
+  
+  experiences  Experience[]
+  reservations Reservation[]
+}
+
+model Experience {
+  id             Int           @id @default(autoincrement())
+  title          String
+  description    String
+  city           String
+  price          Float
+  duration       String
+  imageUrl       String
+  guideName      String
+  rating         Float
+  availableSlots Int
+  reservations   Reservation[]
+  
+  guideId        Int?
+  guide          User?         @relation(fields: [guideId], references: [id])
+  category       String        @default("Naturaleza")
+}
+
+model Reservation {
+  id           Int        @id @default(autoincrement())
+  customerName String
+  customerEmail String
+  peopleCount  Int
+  experienceId Int
+  experience   Experience @relation(fields: [experienceId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  
+  userId       Int?
+  user         User?      @relation(fields: [userId], references: [id])
+}
