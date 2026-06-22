@@ -8,12 +8,34 @@ import { revalidatePath } from 'next/cache';
 const experienceSchema = z.object({
   title: z.string().trim().min(5, { message: 'El título debe tener al menos 5 caracteres.' }),
   description: z.string().trim().min(15, { message: 'La descripción debe tener al menos 15 caracteres.' }),
-  city: z.string().trim().min(2, { message: 'Debe ingresar una ciudad válida.' }),
-  price: z.coerce.number().positive({ message: 'El precio debe ser un número positivo.' }),
+  city: z.string().trim().min(2, { message: 'Debe ingresar una ciudad o localidad válida.' }),
+  price: z.preprocess(
+    (val) => (val === '' || val === null || val === undefined ? undefined : val),
+    z.coerce.number({ required_error: 'Debe ingresar el precio.', invalid_type_error: 'El precio debe ser un número válido.' })
+      .positive({ message: 'El precio debe ser un número positivo.' })
+  ),
   duration: z.string().trim().min(2, { message: 'Debe ingresar la duración (ej: 3 horas).' }),
-  availableSlots: z.coerce.number().int().min(1, { message: 'Debe ingresar al menos 1 cupo.' }),
-  imageUrl: z.string().trim().url({ message: 'Debe ingresar un enlace de imagen válido.' }).or(
-    z.string().trim().startsWith('/', { message: 'La imagen de plantilla debe ser una ruta válida.' })
+  availableSlots: z.preprocess(
+    (val) => (val === '' || val === null || val === undefined ? undefined : val),
+    z.coerce.number({ required_error: 'Debe ingresar los cupos disponibles.', invalid_type_error: 'La cantidad de cupos debe ser un número entero.' })
+      .int({ message: 'Los cupos deben ser un número entero.' })
+      .min(1, { message: 'Debe ingresar al menos 1 cupo.' })
+  ),
+  imageUrl: z.string().trim().min(1, { message: 'Debe ingresar o seleccionar una imagen.' }).refine(
+    (val) => {
+      if (val.startsWith('/')) {
+        return val.startsWith('/images/');
+      }
+      try {
+        const url = new URL(val);
+        return url.protocol === 'http:' || url.protocol === 'https:';
+      } catch {
+        return false;
+      }
+    },
+    {
+      message: 'Debe ingresar una URL de imagen válida (ej: https://...) o seleccionar una imagen del catálogo.',
+    }
   ),
   category: z.string().trim().min(2, { message: 'Debe ingresar una categoría válida.' }),
 });
