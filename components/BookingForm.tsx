@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useState } from 'react';
 import { createReservation, ActionState } from '@/app/actions';
-import { AlertCircle, CheckCircle2, Ticket, Users, Mail, User, ArrowRight, Compass } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Ticket, ArrowRight, Compass, ShieldCheck, User, Minus, Plus, Info } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import Link from 'next/link';
 
@@ -10,6 +10,7 @@ interface BookingFormProps {
   experienceId: number;
   experienceTitle: string;
   availableSlots: number;
+  price: number;
   session: any;
 }
 
@@ -19,6 +20,7 @@ export default function BookingForm({
   experienceId,
   experienceTitle,
   availableSlots,
+  price,
   session,
 }: BookingFormProps) {
   const [state, formAction, isPending] = useActionState(createReservation, initialState);
@@ -31,53 +33,66 @@ export default function BookingForm({
         particleCount: 150,
         spread: 80,
         origin: { y: 0.6 },
-        colors: ['#0f766e', '#d97706', '#14b8a6', '#f59e0b'],
+        colors: ['#0f766e', '#fb7185', '#14b8a6', '#f43f5e'],
       });
     }
   }, [state]);
 
   const isSoldOut = availableSlots <= 0;
+  const totalPrice = price * peopleCount;
 
   // Render Success Confirmation
   if (state?.success && state.data) {
     const { reservationId, customerName, peopleCount: count } = state.data;
+    const finalPrice = price * count;
+
     return (
-      <div className="rounded-2xl border-2 border-emerald-500/20 bg-emerald-500/5 p-6 md:p-8 text-center shadow-lg fade-in-up">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500 text-white shadow-md shadow-emerald-500/20">
-          <CheckCircle2 className="h-8 w-8" />
+      <div className="rounded-3xl border border-border bg-card p-6 md:p-8 text-center shadow-sm flex flex-col items-center animate-in fade-in zoom-in-95 duration-500">
+        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-500 mb-6">
+          <CheckCircle2 className="h-10 w-10" />
         </div>
-        
-        <h3 className="mt-4 text-xl font-extrabold text-stone-900 dark:text-stone-50">
+
+        <h3 className="text-2xl font-extrabold text-foreground">
           ¡Reserva Confirmada!
         </h3>
-        
+
         <p className="mt-2 text-sm text-muted">
-          Tu boleto ha sido guardado con éxito. Hemos enviado un correo de confirmación.
+          Tu boleto ha sido generado con éxito. Hemos enviado un correo a <span className="font-semibold text-foreground">{session.email}</span>.
         </p>
 
         {/* Ticket Details */}
-        <div className="mt-6 rounded-xl border border-dashed border-border bg-card p-5 text-left shadow-sm">
-          <div className="flex items-center justify-between border-b border-border/80 pb-3">
-            <span className="text-xs font-semibold text-muted uppercase tracking-wider">Boleto TurisLocalRD</span>
-            <span className="inline-flex items-center gap-1 rounded bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary">
-              #{reservationId}
-            </span>
-          </div>
-
-          <div className="space-y-3 pt-3 text-sm">
-            <div>
-              <span className="text-xs text-muted block">Experiencia</span>
-              <span className="font-semibold text-stone-900 dark:text-stone-100">{experienceTitle}</span>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <span className="text-xs text-muted block">Titular</span>
-                <span className="font-semibold text-stone-950 dark:text-stone-50 truncate block">{customerName}</span>
+        <div className="mt-8 w-full relative">
+          <div className="rounded-2xl bg-muted-light/50 border border-border p-6 text-left relative overflow-hidden">
+            <div className="flex items-center justify-between border-b border-border/80 pb-4 mb-4 relative z-10">
+              <div className="flex items-center gap-2">
+                <Ticket className="h-5 w-5 text-primary" />
+                <span className="text-sm font-bold text-foreground uppercase tracking-wider">Pase de Abordaje</span>
               </div>
+              <span className="inline-flex items-center gap-1 rounded bg-primary/10 px-2.5 py-1 text-xs font-extrabold text-primary">
+                #{reservationId}
+              </span>
+            </div>
+
+            <div className="space-y-4 relative z-10">
               <div>
-                <span className="text-xs text-muted block">Viajeros</span>
-                <span className="font-semibold text-stone-950 dark:text-stone-50">{count} {count === 1 ? 'persona' : 'personas'}</span>
+                <span className="text-xs font-semibold text-muted uppercase tracking-wider block mb-1">Experiencia</span>
+                <span className="font-bold text-foreground text-base">{experienceTitle}</span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <span className="text-xs font-semibold text-muted uppercase tracking-wider block mb-1">Viajero</span>
+                  <span className="font-bold text-foreground truncate block">{customerName}</span>
+                </div>
+                <div>
+                  <span className="text-xs font-semibold text-muted uppercase tracking-wider block mb-1">Total Viajeros</span>
+                  <span className="font-bold text-foreground">{count} {count === 1 ? 'persona' : 'personas'}</span>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-border/80 flex justify-between items-end">
+                <span className="text-xs font-semibold text-muted uppercase tracking-wider block mb-1">Monto Pagado</span>
+                <span className="font-extrabold text-foreground text-xl">${finalPrice.toFixed(2)}</span>
               </div>
             </div>
           </div>
@@ -85,158 +100,176 @@ export default function BookingForm({
 
         <button
           onClick={() => window.location.reload()}
-          className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-sm font-semibold text-white hover:bg-primary-hover shadow-sm hover:shadow transition-all"
+          className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-4 md:py-5 text-base font-bold text-white hover:bg-primary-hover active:scale-[0.98] transition-all w-full justify-center"
         >
-          <Compass className="h-4 w-4" />
-          Explorar más experiencias
+          <Compass className="h-5 w-5" />
+          Descubrir más experiencias
         </button>
       </div>
     );
   }
 
+  // Not logged in state
   if (!session) {
     return (
-      <div className="rounded-2xl border border-border bg-card p-6 shadow-md text-center">
-        <h3 className="text-lg font-bold text-stone-900 dark:text-stone-50 flex items-center justify-center gap-2">
-          <Ticket className="h-5 w-5 text-primary" />
-          Reservar Experiencia
+      <div className="rounded-3xl border border-border bg-card p-6 md:p-8 shadow-sm text-center flex flex-col items-center">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary mb-5">
+          <Ticket className="h-8 w-8" />
+        </div>
+        <h3 className="text-xl font-bold text-foreground mb-3">
+          Reserva esta Experiencia
         </h3>
-        <p className="mt-3 text-xs text-muted leading-relaxed">
-          Inicia sesión o regístrate para reservar esta experiencia de forma rápida y llevar un control de tus reservas.
+        <p className="text-sm text-muted leading-relaxed max-w-sm">
+          Inicia sesión o regístrate para asegurar tu lugar de forma rápida.
         </p>
         <Link
           href="/login"
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-semibold text-white hover:bg-primary-hover shadow-md hover:shadow shadow-primary/20 transition-all"
+          className="mt-8 flex w-full items-center justify-center gap-2 rounded-2xl bg-primary py-4 md:py-5 text-base font-bold text-white hover:bg-primary-hover active:scale-[0.98] transition-all"
         >
           <span>Iniciar Sesión para Reservar</span>
-          <ArrowRight className="h-4 w-4" />
+          <ArrowRight className="h-5 w-5" />
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-border bg-card p-6 shadow-md">
-      <h3 className="text-lg font-bold text-stone-900 dark:text-stone-50 flex items-center gap-2">
-        <Ticket className="h-5 w-5 text-primary" />
-        Reservar esta Experiencia
-      </h3>
-      
-      <p className="mt-1.5 text-xs text-muted">
-        Estás reservando como <span className="font-semibold text-stone-950 dark:text-stone-50">{session.name}</span>.
-      </p>
+    <div className="rounded-3xl border border-border bg-card p-6 md:p-8 shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
+          <Ticket className="h-5 w-5 text-primary shrink-0" />
+          Reserva tu lugar
+        </h3>
+
+        {/* Availability Badge */}
+        {isSoldOut ? (
+          <span className="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-600 self-start sm:self-auto border border-red-100">
+            Agotado
+          </span>
+        ) : (
+          <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold self-start sm:self-auto ${
+            availableSlots <= 3
+              ? 'bg-amber-50 text-amber-700 border border-amber-200'
+              : 'bg-primary/10 text-primary border border-primary/20'
+          }`}>
+            {availableSlots <= 3 && <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse"></span>}
+            {availableSlots} {availableSlots === 1 ? 'cupo libre' : 'cupos libres'}
+          </span>
+        )}
+      </div>
 
       {/* General Alert Message */}
       {state?.message && !state.success && (
-        <div className="mt-4 flex items-start gap-2.5 rounded-lg bg-red-500/10 p-3 text-sm text-red-600 border border-red-500/20">
-          <AlertCircle className="h-5 w-5 shrink-0" />
-          <span>{state.message}</span>
+        <div className="mb-6 flex items-start gap-3 rounded-2xl bg-red-50 p-4 text-sm text-red-700 border border-red-100 animate-in fade-in slide-in-from-top-2">
+          <AlertCircle className="h-5 w-5 shrink-0 text-red-500 mt-0.5" />
+          <div className="flex flex-col">
+            <span className="font-bold">No pudimos procesar tu reserva</span>
+            <span className="opacity-90 mt-0.5">{state.message}</span>
+          </div>
         </div>
       )}
 
-      <form action={formAction} className="mt-6 space-y-4">
-        {/* Hidden inputs to pass data to Server Action */}
+      <form action={formAction} className="space-y-6">
         <input type="hidden" name="experienceId" value={experienceId} />
+        {/* Required for backend action without editable inputs */}
+        <input type="hidden" name="customerName" value={session.name} />
+        <input type="hidden" name="customerEmail" value={session.email} />
 
-        {/* Customer Name */}
+        {/* User Info Summary (Reduced Mental Load) */}
         <div>
-          <label htmlFor="customerName" className="block text-xs font-semibold uppercase tracking-wider text-muted">
-            Nombre Completo
-          </label>
-          <div className="relative mt-1.5 flex items-center">
-            <div className="pointer-events-none absolute left-3 text-muted">
-              <User className="h-4 w-4" />
+          <p className="text-[10px] font-bold uppercase tracking-widest text-muted mb-3">Datos del viajero principal</p>
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+              <User className="h-5 w-5" />
             </div>
-            <input
-              type="text"
-              id="customerName"
-              name="customerName"
-              value={session.name}
-              readOnly
-              required
-              className="w-full rounded-xl border border-border bg-stone-100 dark:bg-stone-900/50 py-2.5 pl-10 pr-4 text-sm text-stone-500 dark:text-stone-400 cursor-not-allowed outline-none"
-            />
+            <div className="flex flex-col overflow-hidden">
+              <span className="font-bold text-sm text-foreground truncate">{session.name}</span>
+              <span className="text-xs text-muted truncate">{session.email}</span>
+            </div>
           </div>
-          {state?.errors?.customerName && (
-            <p className="mt-1 text-xs text-red-600 font-medium">{state.errors.customerName[0]}</p>
-          )}
         </div>
 
-        {/* Customer Email */}
+        {/* People Count Stepper */}
         <div>
-          <label htmlFor="customerEmail" className="block text-xs font-semibold uppercase tracking-wider text-muted">
-            Correo Electrónico
+          <label className="block text-[10px] font-bold uppercase tracking-widest text-muted mb-3">
+            ¿Cuántas personas van?
           </label>
-          <div className="relative mt-1.5 flex items-center">
-            <div className="pointer-events-none absolute left-3 text-muted">
-              <Mail className="h-4 w-4" />
-            </div>
-            <input
-              type="email"
-              id="customerEmail"
-              name="customerEmail"
-              value={session.email}
-              readOnly
-              required
-              className="w-full rounded-xl border border-border bg-stone-100 dark:bg-stone-900/50 py-2.5 pl-10 pr-4 text-sm text-stone-500 dark:text-stone-400 cursor-not-allowed outline-none"
-            />
-          </div>
-          {state?.errors?.customerEmail && (
-            <p className="mt-1 text-xs text-red-600 font-medium">{state.errors.customerEmail[0]}</p>
-          )}
-        </div>
-
-        {/* People Count selector */}
-        <div>
-          <label htmlFor="peopleCount" className="block text-xs font-semibold uppercase tracking-wider text-muted">
-            Cantidad de Personas
-          </label>
-          <div className="relative mt-1.5 flex items-center">
-            <div className="pointer-events-none absolute left-3 text-muted">
-              <Users className="h-4 w-4" />
+          <div className="flex items-center justify-between rounded-2xl border border-border p-2 bg-muted-light/30">
+            <button
+              type="button"
+              disabled={peopleCount <= 1 || isSoldOut || isPending}
+              onClick={() => setPeopleCount(p => Math.max(1, p - 1))}
+              className="flex h-12 w-12 items-center justify-center rounded-xl bg-card border border-border text-foreground hover:bg-muted-light active:scale-95 disabled:opacity-50 disabled:active:scale-100 transition-all shadow-sm"
+              aria-label="Reducir cantidad de personas"
+            >
+              <Minus className="h-5 w-5" />
+            </button>
+            
+            <div className="flex flex-col items-center">
+              <span className="text-xl font-extrabold text-foreground leading-none">{peopleCount}</span>
+              <span className="text-xs font-medium text-muted mt-1">{peopleCount === 1 ? 'Viajero' : 'Viajeros'}</span>
             </div>
             
-            <select
-              id="peopleCount"
-              name="peopleCount"
-              value={peopleCount}
-              onChange={(e) => setPeopleCount(Number(e.target.value))}
-              disabled={isSoldOut || isPending}
-              className={`w-full rounded-xl border border-border bg-background py-2.5 pl-10 pr-4 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all`}
+            <button
+              type="button"
+              disabled={peopleCount >= Math.min(10, availableSlots) || isSoldOut || isPending}
+              onClick={() => setPeopleCount(p => Math.min(10, availableSlots, p + 1))}
+              className="flex h-12 w-12 items-center justify-center rounded-xl bg-card border border-border text-foreground hover:bg-muted-light active:scale-95 disabled:opacity-50 disabled:active:scale-100 transition-all shadow-sm"
+              aria-label="Aumentar cantidad de personas"
             >
-              {Array.from({ length: Math.max(1, Math.min(10, availableSlots)) }).map((_, i) => (
-                <option key={i + 1} value={i + 1}>
-                  {i + 1} {i + 1 === 1 ? 'Persona' : 'Personas'}
-                </option>
-              ))}
-            </select>
+              <Plus className="h-5 w-5" />
+            </button>
           </div>
+          <input type="hidden" name="peopleCount" value={peopleCount} />
           {state?.errors?.peopleCount && (
-            <p className="mt-1 text-xs text-red-600 font-medium">{state.errors.peopleCount[0]}</p>
+            <p className="mt-2 flex items-center gap-1.5 text-xs text-red-600 font-medium">
+              <AlertCircle className="h-3.5 w-3.5" />
+              {state.errors.peopleCount[0]}
+            </p>
           )}
         </div>
 
-        {/* Submit button */}
-        <button
-          type="submit"
-          disabled={isSoldOut || isPending}
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-semibold text-white hover:bg-primary-hover shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 active:scale-98 transition-all disabled:pointer-events-none disabled:bg-muted disabled:shadow-none"
-        >
-          {isPending ? (
-            <>
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-              <span>Procesando Reserva...</span>
-            </>
-          ) : isSoldOut ? (
-            <span>Agotado</span>
-          ) : (
-            <>
-              <span>Reservar Experiencia</span>
-              <ArrowRight className="h-4 w-4" />
-            </>
-          )}
-        </button>
+        {/* Total Price & Submit Button Section */}
+        <div className="pt-6 border-t border-border mt-6">
+          <div className="flex justify-between items-end mb-6">
+            <div className="flex flex-col">
+              <span className="text-sm font-bold text-foreground">Total a pagar</span>
+              <span className="text-xs text-muted flex items-center gap-1 mt-1">
+                <Info className="h-3 w-3" /> Impuestos incluidos
+              </span>
+            </div>
+            <div className="flex flex-col items-end">
+              <span className="text-3xl font-black text-foreground leading-none">
+                ${totalPrice.toFixed(2)}
+              </span>
+              <span className="text-xs font-medium text-muted mt-2">
+                ${price.toFixed(2)} x {peopleCount} {peopleCount === 1 ? 'persona' : 'personas'}
+              </span>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isSoldOut || isPending}
+            className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-secondary py-4 md:py-5 text-lg font-bold text-white hover:bg-secondary-hover shadow-[0_8px_20px_-6px_rgba(251,113,133,0.5)] active:scale-[0.98] transition-all disabled:pointer-events-none disabled:bg-muted disabled:shadow-none"
+          >
+            {isPending ? (
+              <>
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white"></div>
+                <span>Confirmando...</span>
+              </>
+            ) : isSoldOut ? (
+              <span>Experiencia Agotada</span>
+            ) : (
+              <>
+                <ShieldCheck className="h-6 w-6" />
+                <span>Confirmar Reserva</span>
+              </>
+            )}
+          </button>
+        </div>
       </form>
     </div>
   );
 }
+

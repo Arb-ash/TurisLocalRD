@@ -121,96 +121,112 @@ export default function GuideDashboardClient({
 
   return (
     <div className="space-y-8">
-      {/* Stats Grid */}
+      {/* Stats Grid - Rediseñado sin pastel y con Primary para íconos/números */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Stat 1 */}
-        <div className="rounded-3xl border border-teal-500/15 bg-gradient-to-br from-teal-500/10 to-emerald-500/5 p-5 shadow-sm flex items-center gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-teal-500/20 text-teal-700 dark:text-teal-400">
-            <DollarSign className="h-6 w-6" />
+        <div className="rounded-3xl border border-border bg-card p-6 shadow-sm flex flex-col gap-4 relative overflow-hidden group hover:border-primary/20 transition-all">
+          <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-primary/5 blur-2xl group-hover:bg-primary/10 transition-all"></div>
+          <div className="flex justify-between items-start">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <DollarSign className="h-6 w-6" />
+            </div>
           </div>
           <div>
-            <span className="text-xs text-muted block leading-none">Ganancias Totales</span>
-            <span className="text-xl font-extrabold text-stone-900 dark:text-stone-50 mt-1 block">
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted block mb-1">Ganancias</span>
+            <span className="text-3xl font-black text-primary block leading-none">
               ${totalEarnings.toFixed(2)}
             </span>
           </div>
         </div>
 
         {/* Stat 2 */}
-        <div className="rounded-3xl border border-amber-500/15 bg-gradient-to-br from-amber-500/10 to-yellow-500/5 p-5 shadow-sm flex items-center gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-500/20 text-amber-700 dark:text-amber-400">
-            <Map className="h-6 w-6" />
+        <div className="rounded-3xl border border-border bg-card p-6 shadow-sm flex flex-col gap-4 relative overflow-hidden group hover:border-primary/20 transition-all">
+          <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-primary/5 blur-2xl group-hover:bg-primary/10 transition-all"></div>
+          <div className="flex justify-between items-start">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <Map className="h-6 w-6" />
+            </div>
           </div>
           <div>
-            <span className="text-xs text-muted block leading-none">Tours Publicados</span>
-            <span className="text-xl font-extrabold text-stone-900 dark:text-stone-50 mt-1 block">
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted block mb-1">Tours Activos</span>
+            <span className="text-3xl font-black text-primary block leading-none">
               {totalTours}
             </span>
           </div>
         </div>
 
         {/* Stat 3 */}
-        <div className="rounded-3xl border border-indigo-500/15 bg-gradient-to-br from-indigo-500/10 to-purple-500/5 p-5 shadow-sm flex items-center gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-indigo-500/20 text-indigo-700 dark:text-indigo-400">
-            <Ticket className="h-6 w-6" />
+        <div className="rounded-3xl border border-border bg-card p-6 shadow-sm flex flex-col gap-4 relative overflow-hidden group hover:border-primary/20 transition-all">
+          <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-primary/5 blur-2xl group-hover:bg-primary/10 transition-all"></div>
+          <div className="flex justify-between items-start">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <Ticket className="h-6 w-6" />
+            </div>
           </div>
           <div>
-            <span className="text-xs text-muted block leading-none">Reservas Recibidas</span>
-            <span className="text-xl font-extrabold text-stone-900 dark:text-stone-50 mt-1 block">
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted block mb-1">Reservas</span>
+            <span className="text-3xl font-black text-primary block leading-none">
               {totalBookings}
             </span>
           </div>
         </div>
 
         {/* Stat 4 */}
-        <div className="rounded-3xl border border-emerald-500/15 bg-gradient-to-br from-emerald-500/10 to-teal-500/5 p-5 shadow-sm flex items-center gap-4">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/20 text-emerald-700 dark:text-emerald-400">
-            <Users className="h-6 w-6" />
+        <div className="rounded-3xl border border-border bg-card p-6 shadow-sm flex flex-col gap-4 relative overflow-hidden group hover:border-primary/20 transition-all">
+          <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-primary/5 blur-2xl group-hover:bg-primary/10 transition-all"></div>
+          <div className="flex justify-between items-start">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <Users className="h-6 w-6" />
+            </div>
           </div>
           <div>
-            <span className="text-xs text-muted block leading-none">Turistas Guiados</span>
-            <span className="text-xl font-extrabold text-stone-900 dark:text-stone-50 mt-1 block">
+            <span className="text-xs font-semibold uppercase tracking-wider text-muted block mb-1">Turistas</span>
+            <span className="text-3xl font-black text-primary block leading-none">
               {totalTourists}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Tabs Switcher */}
-      <div className="flex border-b border-border">
-        <button
-          onClick={() => setActiveTab('bookings')}
-          className={`flex items-center gap-2 border-b-2 px-6 py-3 text-sm font-semibold transition-all ${
-            activeTab === 'bookings'
-              ? 'border-primary text-primary font-bold'
-              : 'border-transparent text-muted hover:text-foreground'
-          }`}
-        >
-          <Ticket className="h-4 w-4" />
-          Reservas Recibidas ({totalBookings})
-        </button>
-        <button
-          onClick={() => setActiveTab('tours')}
-          className={`flex items-center gap-2 border-b-2 px-6 py-3 text-sm font-semibold transition-all ${
-            activeTab === 'tours'
-              ? 'border-primary text-primary font-bold'
-              : 'border-transparent text-muted hover:text-foreground'
-          }`}
-        >
-          <Map className="h-4 w-4" />
-          Mis Experiencias ({totalTours})
-        </button>
-        <button
-          onClick={() => setActiveTab('create')}
-          className={`flex items-center gap-2 border-b-2 px-6 py-3 text-sm font-semibold transition-all ${
-            activeTab === 'create'
-              ? 'border-primary text-primary font-bold'
-              : 'border-transparent text-muted hover:text-foreground'
-          }`}
-        >
-          <PlusCircle className="h-4 w-4" />
-          Publicar Nuevo Tour
-        </button>
+      {/* Tabs Switcher and CTA Moved Here */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border gap-4 pb-0">
+        <div className="flex">
+          <button
+            onClick={() => setActiveTab('bookings')}
+            className={`flex items-center gap-2 border-b-2 px-6 py-4 text-sm font-semibold transition-all ${
+              activeTab === 'bookings'
+                ? 'border-primary text-primary font-bold'
+                : 'border-transparent text-muted hover:text-foreground'
+            }`}
+          >
+            <Ticket className="h-4 w-4" />
+            Reservas Recibidas
+          </button>
+          <button
+            onClick={() => setActiveTab('tours')}
+            className={`flex items-center gap-2 border-b-2 px-6 py-4 text-sm font-semibold transition-all ${
+              activeTab === 'tours'
+                ? 'border-primary text-primary font-bold'
+                : 'border-transparent text-muted hover:text-foreground'
+            }`}
+          >
+            <Map className="h-4 w-4" />
+            Mis Experiencias
+          </button>
+        </div>
+        <div className="pb-3 sm:pb-0 sm:mb-[2px]">
+          <button
+            onClick={() => setActiveTab('create')}
+            className={`inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-3 text-sm font-bold text-white transition-all shadow-lg active:scale-95 w-full sm:w-auto ${
+              activeTab === 'create'
+                ? 'bg-secondary-hover shadow-secondary/30 ring-2 ring-secondary/50 ring-offset-2 ring-offset-background'
+                : 'bg-secondary hover:bg-secondary-hover shadow-secondary/20 hover:shadow-xl hover:-translate-y-0.5'
+            }`}
+          >
+            <PlusCircle className="h-5 w-5" />
+            Publicar Nuevo Tour
+          </button>
+        </div>
       </div>
 
       {/* Tab 1: Bookings list */}
@@ -259,13 +275,16 @@ export default function GuideDashboardClient({
               </div>
             </div>
           ) : (
-            <div className="rounded-3xl border border-dashed border-border bg-card p-12 text-center shadow-sm max-w-lg mx-auto">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-muted-light text-muted">
-                <Ticket className="h-6 w-6" />
+            <div className="rounded-3xl border border-border bg-card p-16 text-center shadow-sm max-w-2xl mx-auto flex flex-col items-center justify-center my-8">
+              <div className="relative mb-6">
+                <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full"></div>
+                <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-primary/10 text-primary shadow-inner">
+                  <Ticket className="h-10 w-10" />
+                </div>
               </div>
-              <h3 className="mt-4 text-base font-bold text-foreground">Sin reservas activas</h3>
-              <p className="mt-2 text-xs text-muted">
-                Aún no has recibido reservas para tus experiencias. ¡Asegúrate de que tus tours sean atractivos!
+              <h3 className="text-3xl font-bold text-foreground font-serif tracking-tight mb-3">Sin reservas activas</h3>
+              <p className="text-base text-muted max-w-md leading-relaxed">
+                Aún no has recibido reservas para tus experiencias. ¡Asegúrate de que tus tours sean atractivos y destaquen!
               </p>
             </div>
           )}
@@ -363,19 +382,22 @@ export default function GuideDashboardClient({
               ))}
             </div>
           ) : (
-            <div className="rounded-3xl border border-dashed border-border bg-card p-12 text-center shadow-sm max-w-lg mx-auto">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-muted-light text-muted">
-                <Map className="h-6 w-6" />
+            <div className="rounded-3xl border border-border bg-card p-16 text-center shadow-sm max-w-2xl mx-auto flex flex-col items-center justify-center my-8">
+              <div className="relative mb-6">
+                <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full"></div>
+                <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-primary/10 text-primary shadow-inner">
+                  <Map className="h-10 w-10" />
+                </div>
               </div>
-              <h3 className="mt-4 text-base font-bold text-foreground">No tienes tours publicados</h3>
-              <p className="mt-2 text-xs text-muted">
-                Comienza a publicar tours para que los turistas puedan encontrarte y reservar.
+              <h3 className="text-3xl font-bold text-foreground font-serif tracking-tight mb-3">No tienes tours publicados</h3>
+              <p className="text-base text-muted max-w-md leading-relaxed">
+                Comienza a publicar tours para que los turistas puedan encontrarte y reservar maravillosas experiencias contigo.
               </p>
               <button
                 onClick={() => setActiveTab('create')}
-                className="mt-6 inline-flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-white hover:bg-primary-hover shadow transition-all"
+                className="mt-8 inline-flex items-center gap-2 rounded-2xl bg-secondary px-8 py-4 text-base font-bold text-white hover:bg-secondary-hover shadow-xl shadow-secondary/20 hover:shadow-2xl transition-all active:scale-95"
               >
-                <PlusCircle className="h-4 w-4" />
+                <PlusCircle className="h-5 w-5" />
                 Publicar Primer Tour
               </button>
             </div>

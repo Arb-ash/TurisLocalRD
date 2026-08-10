@@ -21,26 +21,26 @@ export default async function Home({ searchParams }: PageProps) {
     AND: [
       q
         ? {
-            OR: [
-              { title: { contains: q } },
-              { description: { contains: q } },
-              { guideName: { contains: q } },
-            ],
-          }
+          OR: [
+            { title: { contains: q } },
+            { description: { contains: q } },
+            { guideName: { contains: q } },
+          ],
+        }
         : {},
       city && city !== 'Todos'
         ? {
-            city: {
-              equals: city,
-            },
-          }
+          city: {
+            equals: city,
+          },
+        }
         : {},
       category && category !== 'Todos'
         ? {
-            category: {
-              equals: category,
-            },
-          }
+          category: {
+            equals: category,
+          },
+        }
         : {},
     ],
   };
@@ -88,29 +88,47 @@ export default async function Home({ searchParams }: PageProps) {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-stone-900 py-20 text-white md:py-28">
-        {/* Background Decorative patterns */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-teal-800/40 via-stone-900 to-stone-950 opacity-90 z-0"></div>
-        <div className="absolute -left-16 -top-16 h-64 w-64 rounded-full bg-primary/10 blur-3xl z-0"></div>
-        <div className="absolute right-0 bottom-0 h-80 w-80 rounded-full bg-secondary/10 blur-3xl z-0"></div>
+      <section className="relative overflow-hidden bg-background pt-12 pb-20 lg:pt-24 lg:pb-32 border-b border-border">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row gap-12 items-center">
+            {/* Text Content */}
+            <div className="w-full lg:w-1/2 z-10">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 border border-primary/20 px-3 py-1.5 text-xs font-semibold tracking-wider text-primary uppercase mb-6">
+                <Sparkles className="h-3.5 w-3.5" />
+                Turismo Auténtico y Sostenible
+              </span>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/20 border border-primary/30 px-3 py-1.5 text-xs font-semibold tracking-wider text-primary uppercase mb-6">
-            <Sparkles className="h-3.5 w-3.5" />
-            Turismo Auténtico y Sostenible
-          </span>
-          
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl text-white max-w-4xl mx-auto leading-tight">
-            Descubre la esencia de Dominicana con <span className="text-primary">Guías Locales</span>
-          </h1>
-          
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-stone-300 md:text-xl">
-            Rutas históricas, gastronomía tradicional y joyas ecológicas ocultas. Vive experiencias únicas diseñadas por quienes mejor conocen su tierra.
-          </p>
+              <h1 className="font-serif text-5xl font-extrabold tracking-tight sm:text-6xl md:text-7xl text-foreground leading-[1.1]">
+                Descubre la esencia <span className="text-primary italic font-normal">Dominicana</span>
+              </h1>
 
-          {/* Interactive Search Widget Container */}
-          <div className="mt-10 w-full max-w-3xl mx-auto rounded-3xl bg-card/10 border border-white/10 p-4 backdrop-blur-md shadow-2xl">
-            <SearchFilters />
+              <p className="mt-6 max-w-lg text-lg text-muted md:text-xl font-light">
+                Rutas históricas, gastronomía tradicional y joyas ecológicas ocultas. Vive experiencias únicas diseñadas por quienes mejor conocen su tierra.
+              </p>
+
+              {/* Mobile Search Widget (visible on small screens) */}
+              <div className="mt-10 lg:hidden w-full rounded-3xl bg-card border border-border p-5 shadow-xl relative z-20">
+                <SearchFilters />
+              </div>
+            </div>
+
+            {/* Image & Desktop Search Widget */}
+            <div className="w-full lg:w-1/2 relative">
+              <div className="relative aspect-[4/5] sm:aspect-square lg:aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white dark:border-stone-900 bg-muted-light">
+                <img
+                  src="/hero-image.png"
+                  alt="Turismo local en República Dominicana"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Desktop Floating Widget */}
+              <div className="hidden lg:block absolute -left-16 -bottom-10 right-10 z-30">
+                <div className="rounded-3xl glass-effect border border-border p-6 shadow-2xl bg-white/95 dark:bg-card/95">
+                  <SearchFilters />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -126,9 +144,8 @@ export default async function Home({ searchParams }: PageProps) {
             <p className="mt-2 text-sm text-muted">
               {experiences.length === 0
                 ? 'No se encontraron resultados para tu búsqueda'
-                : `Mostrando ${experiences.length} ${
-                    experiences.length === 1 ? 'experiencia única' : 'experiencias únicas'
-                  }`}
+                : `Mostrando ${experiences.length} ${experiences.length === 1 ? 'experiencia única' : 'experiencias únicas'
+                }`}
             </p>
           </div>
 
@@ -175,9 +192,14 @@ export default async function Home({ searchParams }: PageProps) {
 
         {/* Catalog Grid */}
         {experiences.length > 0 ? (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 fade-in-up">
-            {experiences.map((exp) => (
-              <ExperienceCard key={exp.id} exp={exp} />
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 fade-in-up">
+            {experiences.map((exp, index) => (
+              <div
+                key={exp.id}
+                className={index === 0 ? "md:col-span-2" : ""}
+              >
+                <ExperienceCard exp={exp} featured={index === 0} />
+              </div>
             ))}
           </div>
         ) : (

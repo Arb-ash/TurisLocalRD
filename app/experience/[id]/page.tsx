@@ -195,6 +195,7 @@ export default async function ExperienceDetailPage({ params }: PageProps) {
                 experienceId={exp.id}
                 experienceTitle={exp.title}
                 availableSlots={exp.availableSlots}
+                price={exp.price}
                 session={session}
               />
               

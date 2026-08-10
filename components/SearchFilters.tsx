@@ -139,7 +139,7 @@ export default function SearchFilters() {
               className={`flex flex-col items-center gap-1.5 py-1 border-b-2 transition-all cursor-pointer whitespace-nowrap min-w-[70px] ${
                 isActive
                   ? 'border-primary text-primary font-bold scale-102'
-                  : 'border-transparent text-stone-300 hover:text-white hover:border-stone-300'
+                  : 'border-transparent text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white hover:border-stone-300'
               }`}
             >
               <Icon className={`h-5 w-5 ${isActive ? 'text-primary' : 'text-stone-400'}`} />
@@ -182,7 +182,7 @@ export default function SearchFilters() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Price Range Selector */}
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="priceRange" className="text-xs font-bold uppercase tracking-wider text-stone-200 dark:text-stone-300 flex items-center gap-1">
+          <label htmlFor="priceRange" className="text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 flex items-center gap-1">
             <DollarSign className="h-3.5 w-3.5 text-primary" />
             Rango de Precio
           </label>
@@ -202,7 +202,7 @@ export default function SearchFilters() {
 
         {/* Sort Selector */}
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="sort" className="text-xs font-bold uppercase tracking-wider text-stone-200 dark:text-stone-300 flex items-center gap-1">
+          <label htmlFor="sort" className="text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 flex items-center gap-1">
             <ArrowUpDown className="h-3.5 w-3.5 text-primary" />
             Ordenar por
           </label>
@@ -224,7 +224,7 @@ export default function SearchFilters() {
       {/* City Badges (with Loader) */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-stone-200 dark:text-stone-300 flex items-center gap-1 px-1">
+          <span className="text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 flex items-center gap-1 px-1">
             <MapPin className="h-3.5 w-3.5 text-primary" />
             Provincias / Destinos
           </span>
