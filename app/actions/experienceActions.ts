@@ -11,13 +11,13 @@ const experienceSchema = z.object({
   city: z.string().trim().min(2, { message: 'Debe ingresar una ciudad o localidad válida.' }),
   price: z.preprocess(
     (val) => (val === '' || val === null || val === undefined ? undefined : val),
-    z.coerce.number({ required_error: 'Debe ingresar el precio.', invalid_type_error: 'El precio debe ser un número válido.' })
+    z.coerce.number({ message: 'El precio debe ser un número válido.' })
       .positive({ message: 'El precio debe ser un número positivo.' })
   ),
   duration: z.string().trim().min(2, { message: 'Debe ingresar la duración (ej: 3 horas).' }),
   availableSlots: z.preprocess(
     (val) => (val === '' || val === null || val === undefined ? undefined : val),
-    z.coerce.number({ required_error: 'Debe ingresar los cupos disponibles.', invalid_type_error: 'La cantidad de cupos debe ser un número entero.' })
+    z.coerce.number({ message: 'La cantidad de cupos debe ser un número entero.' })
       .int({ message: 'Los cupos deben ser un número entero.' })
       .min(1, { message: 'Debe ingresar al menos 1 cupo.' })
   ),
