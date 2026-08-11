@@ -56,7 +56,7 @@ export async function createReservation(
 
   try {
     // 2. Perform DB Transaction (atomic check & decrement slots)
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       // Find the experience first
       const experience = await tx.experience.findUnique({
         where: { id: experienceId },
@@ -135,7 +135,7 @@ export async function cancelReservationAction(
   }
 
   try {
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       // Find reservation
       const res = await tx.reservation.findUnique({
         where: { id: reservationId },
