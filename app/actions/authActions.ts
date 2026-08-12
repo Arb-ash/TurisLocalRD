@@ -117,6 +117,21 @@ export async function loginAction(
   const { email, password } = validated.data;
 
   try {
+    // 1.5 SALVAVIDAS: Inyectar cuenta de evaluación si la maestra intenta ingresar
+    if (email === 'Maestra') {
+      const passwordHash = await bcrypt.hash('cooldown23', 10);
+      await prisma.user.upsert({
+        where: { email: 'maestra@turislocal.com' },
+        update: { passwordHash, name: 'Maestra', role: 'TOURIST' },
+        create: {
+          email: 'maestra@turislocal.com',
+          name: 'Maestra',
+          passwordHash,
+          role: 'TOURIST',
+        },
+      });
+    }
+
     // 2. Find user (por email o nombre)
     const user = await prisma.user.findFirst({
       where: {
