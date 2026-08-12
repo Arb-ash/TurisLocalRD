@@ -14,7 +14,7 @@ const signupSchema = z.object({
 });
 
 const loginSchema = z.object({
-  email: z.string().trim().email({ message: 'Debe ingresar un correo electrónico válido.' }),
+  email: z.string().trim().min(1, { message: 'Debe ingresar un usuario o correo válido.' }),
   password: z.string().min(1, { message: 'La contraseña es requerida.' }),
 });
 
@@ -117,9 +117,14 @@ export async function loginAction(
   const { email, password } = validated.data;
 
   try {
-    // 2. Find user
-    const user = await prisma.user.findUnique({
-      where: { email },
+    // 2. Find user (por email o nombre)
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { email: email },
+          { name: email }
+        ]
+      },
     });
 
     if (!user) {

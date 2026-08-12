@@ -40,7 +40,7 @@ export default function LoginPage() {
           {/* Email */}
           <div>
             <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-muted">
-              Correo Electrónico
+              Usuario o Correo Electrónico
             </label>
             <div className="relative mt-1.5 flex items-center">
               <div className="pointer-events-none absolute left-3 text-muted">
@@ -49,9 +49,9 @@ export default function LoginPage() {
               <input
                 id="email"
                 name="email"
-                type="email"
+                type="text"
                 required
-                placeholder="juan@email.com"
+                placeholder="juan@email.com o Maestra"
                 className={`w-full rounded-xl border bg-background py-2.5 pl-10 pr-4 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-all ${
                   state?.errors?.email ? 'border-red-500 focus-visible:ring-red-500' : 'border-border'
                 }`}

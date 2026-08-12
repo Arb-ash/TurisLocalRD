@@ -1,9 +1,31 @@
 import { prisma } from '../lib/db';
+import bcrypt from 'bcryptjs';
 
 async function main() {
   // Clear existing data
   await prisma.reservation.deleteMany({});
   await prisma.experience.deleteMany({});
+  await prisma.user.deleteMany({});
+
+  const passwordHash = await bcrypt.hash('cooldown23', 10);
+
+  await prisma.user.createMany({
+    data: [
+      {
+        name: 'Maestra',
+        email: 'maestra@turislocal.com',
+        passwordHash,
+        role: 'TOURIST',
+      },
+      {
+        name: 'Maestra_Guia',
+        email: 'maestra-guia@turislocal.com',
+        passwordHash,
+        role: 'GUIDE',
+      },
+    ],
+  });
+
 
   const experiences = [
     {
