@@ -11,10 +11,10 @@ export default async function DemoLoginPage({
 
   async function loginAction(formData: FormData) {
     'use server';
-    const username = formData.get('username');
-    const password = formData.get('password');
+    const username = formData.get('username') as string;
+    const password = formData.get('password') as string;
 
-    if (username === 'Maestra' && password === 'cooldown23') {
+    if (username?.trim() === 'Maestra' && password?.trim() === 'cooldown23') {
       const cookieStore = await cookies();
       cookieStore.set('demo_unlocked', 'true', {
         maxAge: 60 * 60 * 24, // 1 día
@@ -31,7 +31,7 @@ export default async function DemoLoginPage({
     <div className="flex min-h-screen flex-col items-center justify-center bg-stone-50 dark:bg-stone-950 px-4">
       <div className="w-full max-w-md space-y-8 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-8 rounded-3xl shadow-xl">
         <div className="text-center">
-          <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 shadow-md mb-4">
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-600 text-white shadow-md mb-4">
             <Lock className="h-6 w-6" />
           </div>
           <h2 className="text-3xl font-extrabold text-stone-900 dark:text-stone-50">
@@ -79,7 +79,7 @@ export default async function DemoLoginPage({
 
           <button
             type="submit"
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-stone-900 dark:bg-stone-100 py-3 text-sm font-semibold text-white dark:text-stone-900 hover:opacity-90 shadow-md transition-all"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-teal-600 py-3 text-sm font-semibold text-white hover:bg-teal-700 shadow-md transition-all"
           >
             <span>Desbloquear Demo</span>
             <ArrowRight className="h-4 w-4" />
